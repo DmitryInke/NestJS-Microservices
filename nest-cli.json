@@ -36,6 +36,42 @@
       "compilerOptions": {
         "tsConfigPath": "libs/workflows/tsconfig.lib.json"
       }
+    },
+    "alarms-service": {
+      "type": "application",
+      "root": "apps/alarms-service",
+      "entryFile": "main",
+      "sourceRoot": "apps/alarms-service/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/alarms-service/tsconfig.app.json"
+      }
+    },
+    "alarms-generator": {
+      "type": "application",
+      "root": "apps/alarms-generator",
+      "entryFile": "main",
+      "sourceRoot": "apps/alarms-generator/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/alarms-generator/tsconfig.app.json"
+      }
+    },
+    "alarms-classifier-service": {
+      "type": "application",
+      "root": "apps/alarms-classifier-service",
+      "entryFile": "main",
+      "sourceRoot": "apps/alarms-classifier-service/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/alarms-classifier-service/tsconfig.app.json"
+      }
+    },
+    "notifications-service": {
+      "type": "application",
+      "root": "apps/notifications-service",
+      "entryFile": "main",
+      "sourceRoot": "apps/notifications-service/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/notifications-service/tsconfig.app.json"
+      }
     }
   }
 }

@@ -1,14 +1,15 @@
 import { Module } from '@nestjs/common';
-import { BuildingsService } from './buildings.service';
-import { BuildingsController } from './buildings.controller';
+import { OutboxService } from './outbox.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Building } from './entities/building.entity';
+import { Outbox } from './entities/outbox.entity';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { WORKFLOWS_SERVICE } from '../constants';
+import { OutboxProcessor } from './outbox.processor';
+import { OutboxEntitySubscriber } from './outbox.entity-subscriber';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Building]),
+    TypeOrmModule.forFeature([Outbox]),
     ClientsModule.register([
       {
         name: WORKFLOWS_SERVICE,
@@ -20,7 +21,6 @@ import { WORKFLOWS_SERVICE } from '../constants';
       },
     ]),
   ],
-  controllers: [BuildingsController],
-  providers: [BuildingsService],
+  providers: [OutboxService, OutboxProcessor, OutboxEntitySubscriber],
 })
-export class BuildingsModule {}
+export class OutboxModule {}
