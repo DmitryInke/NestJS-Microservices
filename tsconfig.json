@@ -23,6 +23,12 @@
       ],
       "@app/workflows/*": [
         "libs/workflows/src/*"
+      ],
+      "@app/tracing": [
+        "libs/tracing/src"
+      ],
+      "@app/tracing/*": [
+        "libs/tracing/src/*"
       ]
     }
   }

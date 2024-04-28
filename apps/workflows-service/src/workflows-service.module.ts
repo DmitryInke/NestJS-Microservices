@@ -4,9 +4,12 @@ import { WorkflowsServiceService } from './workflows-service.service';
 import { WorkflowsModule } from './workflows/workflows.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { HealthModule } from './health/health.module';
+import { InboxModule } from './inbox/inbox.module';
+import { ScheduleModule } from '@nestjs/schedule';
 
 @Module({
   imports: [
+    ScheduleModule.forRoot(),
     WorkflowsModule,
     TypeOrmModule.forRoot({
       type: 'postgres',
@@ -19,6 +22,7 @@ import { HealthModule } from './health/health.module';
       synchronize: true,
     }),
     HealthModule,
+    InboxModule,
   ],
   controllers: [WorkflowsServiceController],
   providers: [WorkflowsServiceService],

@@ -9,15 +9,41 @@ import {
 } from '@nestjs/common';
 import { WorkflowsService } from './workflows.service';
 import { CreateWorkflowDto, UpdateWorkflowDto } from '@app/workflows';
-import { EventPattern, MessagePattern, Payload } from '@nestjs/microservices';
+import { Ctx, EventPattern, Payload, RmqContext } from '@nestjs/microservices';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { Inbox } from '../inbox/entities/inbox.entity';
 
 @Controller('workflows')
 export class WorkflowsController {
-  constructor(private readonly workflowsService: WorkflowsService) {}
+  constructor(
+    private readonly workflowsService: WorkflowsService,
+    @InjectRepository(Inbox)
+    private readonly inboxRepository: Repository<Inbox>,
+  ) {}
 
   @EventPattern('workflows.create')
-  create(@Payload() createWorkflowDto: CreateWorkflowDto) {
-    return this.workflowsService.create(createWorkflowDto);
+  async create(
+    @Payload() createWorkflowDto: CreateWorkflowDto,
+    @Ctx() context: RmqContext,
+  ) {
+    const message = context.getMessage();
+    const inboxMessage = await this.inboxRepository.findOne({
+      where: {
+        messageId: message.properties.messageId,
+      },
+    });
+    if (!inboxMessage) {
+      await this.inboxRepository.save({
+        messageId: message.properties.messageId,
+        pattern: context.getPattern(),
+        status: 'pending',
+        payload: createWorkflowDto,
+      });
+    }
+
+    const channel = context.getChannelRef();
+    channel.ack(message);
   }
 
   @Get()
